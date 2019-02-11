@@ -1,0 +1,23 @@
+{
+  "name": "graphforapp",
+  "version": "1.0.0",
+  "description": "Live Downforce Tracking",
+  "main": "app.js",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "firebase": "^5.8.2",
+    "nodemon": "^1.18.10",
+    "socketio": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "keywords": [
+    "Downforce"
+  ],
+  "author": "Leon, Rahul, Nial, Prithvi",
+  "license": "ISC"
+}

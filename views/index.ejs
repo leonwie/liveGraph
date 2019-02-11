@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+  <script type="text/javascript">
+  var chart
+  var socket = io.connect()
+  var y = 0;
+  var data = []; var dataSeries = { type: "line" };
+  var dataPoints = [];
+  var limit;
+  window.onload = function () {
+    data = []; var dataSeries = { type: "line" };
+    dataPoints = [];
+    socket.emit("Window_loaded","");
+  }
+  socket.on('Initialize', (datax)=> {
+    limit = datax.length;
+    console.log(datax.length);
+    for (var i = 0; i < limit; i += 1) {
+      y = datax[i];
+      dataPoints.push({
+        x: i,
+        y: y
+      });
+    }
+    dataSeries.dataPoints = dataPoints;
+    data.push(dataSeries);
+      chart = new CanvasJS.Chart("chartContainer",
+      {
+        zoomEnabled: true,
+        title:{
+          text: "Live Downforce tracking"
+        },
+        axisY:{
+          includeZero: false
+        },
+        data: data,  // random generator below
+      });
+      chart.render();
+  });
+      socket.on("add_to_chart", (datax) => {
+        console.log(datax);
+        chart.data[0].addTo("dataPoints", {
+          x:chart.data[0].dataPoints[chart.data[0].dataPoints.length-1].x + 1,
+          y: datax
+        })
+        console.log(chart.data[0]);
+        chart.render()
+       });
+
+  </script>
+  <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script></head>
+  <body>
+    <div id="chartContainer" style="height: 300px; width: 100%;">
+    </div>
+  </body>
+  </html>
