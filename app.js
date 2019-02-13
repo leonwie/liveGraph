@@ -47,7 +47,6 @@ var leadsRef = database.ref('Downforces');
 })*/
 
 
-//})
 
 //listen on every connection
 io.on('connection', (socket) => {
