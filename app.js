@@ -37,14 +37,7 @@ var database = firebase.database();
 var downforce_values = [];
 var leadsRef = database.ref('Downforces');
 
-/*leadsRef.on('value', function(snapshot){
-  snapshot.forEach(function(childSnapshot) {
-    var childData = childSnapshot.val();
-    downforce_values.push(Number(childData["Downforce"]));
-    //update_graph(downforce_values);
-    //console.log(childData["Downforce"]);
-  });
-})*/
+
 
 
 
