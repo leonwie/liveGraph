@@ -3,50 +3,76 @@
 <head>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
   <script type="text/javascript">
+  //Set variable for chart
   var chart
+  //Initialize socket
   var socket = io.connect()
-  var y = 0;
-  var data = []; var dataSeries = { type: "line" };
-  var dataPoints = [];
+  //Initialize variables for the graph
+  var data;
+  var dataSeries;
+  var dataPoints;
   var limit;
+
+  //When window is opened
   window.onload = function () {
-    data = []; var dataSeries = { type: "line" };
+    //Initialize the variables to 0 and set the dataseries to a line
+    data = []; dataSeries = { type: "line" };
     dataPoints = [];
+    //Emit to app.js that the windows has been loaded
     socket.emit("Window_loaded","");
   }
+  //If message received initialize
   socket.on('Initialize', (datax)=> {
+    //Set new limit
     limit = datax.length;
-    console.log(datax.length);
+    //In for loop push the transmitted values into the graph
     for (var i = 0; i < limit; i += 1) {
-      y = datax[i];
       dataPoints.push({
+        //Set x to index
         x: i,
-        y: y
+        //Set y to transmitted data
+        y: datax[i]
       });
     }
+    //Set dataSeries equal to the datapoints
     dataSeries.dataPoints = dataPoints;
     data.push(dataSeries);
+
+    //Define Chart
       chart = new CanvasJS.Chart("chartContainer",
       {
+        //Set zoomEnabled
         zoomEnabled: true,
+        //Set title
         title:{
           text: "Live Downforce tracking"
         },
+        //Settings for X-axis
         axisY:{
           includeZero: false,
           title: "Downforce(N)"
         },
-        data: data,  // random generator below
+        //Settings for Y-axis
+        axisX:{
+          title: "Samples(s)"
+        },
+        //push data onto graph
+        data: data
       });
+      //Render the chart
       chart.render();
   });
+      //Whenever message add_to_chart is received add it to the chart
       socket.on("add_to_chart", (datax) => {
-        console.log(datax);
+        console.log("Data added to Graph");
+        //add the received datapoint to the chart
         chart.data[0].addTo("dataPoints", {
+          //Set x values equal to most recent x value +1
           x:chart.data[0].dataPoints[chart.data[0].dataPoints.length-1].x + 1,
+          //Set y value equal to transmitted data
           y: datax
         })
-        console.log(chart.data[0]);
+        //Render the chart
         chart.render()
        });
 
